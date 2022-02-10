@@ -1,25 +1,26 @@
 import {View, Text, TextInput, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
-import {FireSignUp} from '../FireBase/FireSignUp';
+import {FireLogIn} from '../FireBase/FireLogIn';
 import {AddUser} from '../FireBase/FireUser';
 import FireBase from '../FireBase/FireBase';
 
-const SignUp = () => {
-  const [name, setName] = useState('');
+const LogIn = (props) => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
-  const SignUpByFire = () => {
-    FireSignUp(email, pass)
+  const LogInByFire = () => {
+    FireLogIn(email, pass)
       .then((res) => {
         var userUID = FireBase.auth().currentUser.uid;
         console.log('userUID', res);
-        AddUser(name, email, '', userUID)
-          .then(() => {
-            console.log('Success');
-          })
-          .catch((error) => {
-            console.log('error', error);
-          });
+        props.navigation.navigate('Home')
+
+        // AddUser( email, '', userUID)
+        //   .then(() => {
+        //     console.log('Success');
+        //   })
+        //   .catch((error) => {
+        //     console.log('error', error);
+        //   });
       })
       .catch((error) => {
         console.log('error', error);
@@ -33,20 +34,6 @@ const SignUp = () => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <TextInput
-        placeholder="Enter Name"
-        placeholderTextColor={'black'}
-        style={{
-          borderRadius: 10,
-          borderWidth: 0.5,
-          width: '70%',
-          paddingHorizontal: 10,
-          backgroundColor: 'white',
-        }}
-        onChangeText={(text) => {
-          setName(text);
-        }}
-      />
       <TextInput
         placeholder="Enter Email"
         placeholderTextColor={'black'}
@@ -78,7 +65,7 @@ const SignUp = () => {
       />
       <TouchableOpacity
         onPress={() => {
-          SignUpByFire();
+            LogInByFire();
         }}
         style={{
           backgroundColor: '#ffca02',
@@ -91,10 +78,23 @@ const SignUp = () => {
           alignItems: 'center',
           marginTop: 15,
         }}>
-        <Text style={{fontSize: 18, fontWeight: '700'}}>Sign Up</Text>
+        <Text style={{fontSize: 18, fontWeight: '700'}}>Log In</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+            props.navigation.navigate('SignUp')
+        }}
+        style={{
+          paddingHorizontal: 10,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: 15,
+        }}>
+        <Text style={{fontSize: 15, fontWeight: '700', color:'white'}}>New Acount? Sigin Up</Text>
+      </TouchableOpacity>
+      
     </View>
   );
 };
 
-export default SignUp;
+export default LogIn;
