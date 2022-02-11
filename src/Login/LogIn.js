@@ -1,18 +1,45 @@
-import {View, Text, TextInput, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {FireLogIn} from '../FireBase/FireLogIn';
 import {AddUser} from '../FireBase/FireUser';
 import FireBase from '../FireBase/FireBase';
+import LoadingView from '../Custom/LoadingView';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LogIn = (props) => {
   const [email, setEmail] = useState('');
-  const [pass, setPass] = useState('');
-  const LogInByFire = () => {
+  const [pass, setPass] = useState('123456');
+  const [load, setLoad] = useState(false);
+  useEffect(() => {
+    SavePass();
+  }, []);
+  const SavePass = async () => {
+    setLoad(true);
+    const value = await AsyncStorage.getItem('UID');
+    if (value) {
+      setLoad(false);
+      props.navigation.navigate('Home');
+      // value previously stored
+    } else {
+      setLoad(false);
+    }
+  };
+
+  const LogInByFire = async () => {
+    setLoad(true);
     FireLogIn(email, pass)
-      .then((res) => {
+      .then(async (res) => {
         var userUID = FireBase.auth().currentUser.uid;
-        console.log('userUID', res);
-        props.navigation.navigate('Home')
+        // console.log('userUID', res);
+        await AsyncStorage.setItem('UID', userUID);
+        setLoad(false);
+        props.navigation.navigate('Home');
 
         // AddUser( email, '', userUID)
         //   .then(() => {
@@ -23,6 +50,7 @@ const LogIn = (props) => {
         //   });
       })
       .catch((error) => {
+        setLoad(false);
         console.log('error', error);
       });
   };
@@ -34,6 +62,7 @@ const LogIn = (props) => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
+      {load && <LoadingView />}
       <TextInput
         placeholder="Enter Email"
         placeholderTextColor={'black'}
@@ -65,7 +94,7 @@ const LogIn = (props) => {
       />
       <TouchableOpacity
         onPress={() => {
-            LogInByFire();
+          LogInByFire();
         }}
         style={{
           backgroundColor: '#ffca02',
@@ -82,7 +111,7 @@ const LogIn = (props) => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-            props.navigation.navigate('SignUp')
+          props.navigation.navigate('SignUp');
         }}
         style={{
           paddingHorizontal: 10,
@@ -90,9 +119,10 @@ const LogIn = (props) => {
           alignItems: 'center',
           marginTop: 15,
         }}>
-        <Text style={{fontSize: 15, fontWeight: '700', color:'white'}}>New Acount? Sigin Up</Text>
+        <Text style={{fontSize: 15, fontWeight: '700', color: 'white'}}>
+          New Acount? Sigin Up
+        </Text>
       </TouchableOpacity>
-      
     </View>
   );
 };
