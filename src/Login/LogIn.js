@@ -120,7 +120,7 @@ const LogIn = (props) => {
           marginTop: 15,
         }}>
         <Text style={{fontSize: 15, fontWeight: '700', color: 'white'}}>
-          New Acount? Sigin Up
+          New Acount? Sign Up
         </Text>
       </TouchableOpacity>
     </View>

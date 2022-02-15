@@ -4,7 +4,7 @@ import {FireSignUp} from '../FireBase/FireSignUp';
 import {AddUser} from '../FireBase/FireUser';
 import FireBase from '../FireBase/FireBase';
 
-const SignUp = () => {
+const SignUp = (props) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
@@ -92,6 +92,20 @@ const SignUp = () => {
           marginTop: 15,
         }}>
         <Text style={{fontSize: 18, fontWeight: '700'}}>Sign Up</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          props.navigation.goBack();
+        }}
+        style={{
+          paddingHorizontal: 10,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: 15,
+        }}>
+        <Text style={{fontSize: 15, fontWeight: '700', color: 'white'}}>
+        Already have an account ? Sign In
+        </Text>
       </TouchableOpacity>
     </View>
   );

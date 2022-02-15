@@ -16,15 +16,19 @@ const Header = (props) => {
           // flex: 3,
           // flex:1
         }}>
-        <TouchableOpacity
-          style={{
-            flex: 0.2,
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            paddingHorizontal:10
-          }}>
-          {/* <Image source={Images.ic_LogOut} style={{height: 35, width: 35}} /> */}
-        </TouchableOpacity>
+        {props.ishowBack && (
+          <TouchableOpacity
+            onPress={() => props.OnBack()}
+            style={{
+              flex: 0.2,
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              paddingHorizontal: 10,
+            }}>
+            <Image source={Images.ic_back} style={{height: 35, width: 35}} />
+          </TouchableOpacity>
+        )}
+
         <View
           style={{flex: 0.6, justifyContent: 'center', alignItems: 'center'}}>
           <Text
@@ -32,15 +36,21 @@ const Header = (props) => {
               fontSize: 20,
               fontWeight: '700',
             }}>
-            Message
+            {props.title}
           </Text>
         </View>
-
-        <TouchableOpacity
-        onPress={()=>props.OnLogOut()}
-          style={{flex: 0.2, justifyContent: 'center', alignItems: 'flex-end',paddingHorizontal:10}}>
-          <Image source={Images.ic_LogOut} style={{height: 35, width: 35}} />
-        </TouchableOpacity>
+        {props.ishowMenu && (
+          <TouchableOpacity
+            onPress={() => props.OnLogOut()}
+            style={{
+              flex: 0.2,
+              justifyContent: 'center',
+              alignItems: 'flex-end',
+              paddingHorizontal: 10,
+            }}>
+            <Image source={Images.ic_LogOut} style={{height: 35, width: 35}} />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
